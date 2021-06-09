@@ -2,12 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:proyecto/calendarScreen.dart';
+import 'package:proyecto/gameScreen.dart';
 import './regularScreen.dart';
 import './calendarScreen.dart';
 import './createAccount.dart';
 import './themes/color.dart';
 
 void main() {
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(MyApp());
 }
 
@@ -129,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       'Continuar'
                     ),
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => regularScreen()),);
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => gameScreen()),);
                     },
                   ),
                 ),
