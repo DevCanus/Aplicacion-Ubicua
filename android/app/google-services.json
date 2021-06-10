@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "51122928639",
+    "project_id": "bd-ubicua",
+    "storage_bucket": "bd-ubicua.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:51122928639:android:6873f966e67f60ef1845ca",
+        "android_client_info": {
+          "package_name": "com.example.proyecto"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "51122928639-m7itrqp8jtuklfenbrb62702dcgd2tab.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzlbxYKslT1RHxPmT0XCU57NabVTITxEo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "51122928639-m7itrqp8jtuklfenbrb62702dcgd2tab.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
