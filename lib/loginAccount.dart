@@ -1,15 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:proyecto/calendarScreen.dart';
-import 'package:proyecto/gameScreen.dart';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import './regularScreen.dart';
 import './calendarScreen.dart';
 import './createAccount.dart';
 import './themes/color.dart';
+import './utils/userAuth.dart';
 
-void main() {
+Future<void> main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -32,14 +37,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final user = TextEditingController();
+  final email = TextEditingController();
   final pass = TextEditingController();
 
   @override
 
   void dispose() {
     // Clean up the controller when the widget is disposed.
-    user.dispose();
+    email.dispose();
     pass.dispose();
 
     super.dispose();
@@ -89,10 +94,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 Container(
                   height: 70.0,
                   child: TextField(
-                    controller: user,
+                    controller: email,
                     cursorColor: secondaryDark,
                     decoration: InputDecoration(
-                      hintText: 'Usuario',
+                      hintText: 'algo@email.com',
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                           color: secondaryDark,
@@ -130,8 +135,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Text(
                       'Continuar'
                     ),
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => gameScreen()),);
+                    onPressed: () async {
+                      bool canNavegate = await signIn(email.text, pass.text);
+
+                      if(canNavegate)
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => calendarScreen()),);
                     },
                   ),
                 ),
@@ -165,7 +173,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 color: secondaryDark,
                               ),
                             ),
-                            onTap: () { Navigator.push(context, MaterialPageRoute(builder: (context) => createAccount()),); }
+                            onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (context) => createAccount()),); }
                           ),
                         ],
                       ),

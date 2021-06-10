@@ -6,7 +6,7 @@ List<TileModel> getTiles()
   TileModel model = new TileModel();
 
   //1
-  model.setImage("assets/images/user.png");
+  model.setImage("assets/images/colors.jpg");
   model.setSelected(false);
   tiles.add(model);
 

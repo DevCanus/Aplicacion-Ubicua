@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import './loginAccount.dart';
 import './regularScreen.dart';
 import './themes/color.dart';
+import './utils/userAuth.dart';
 
 class createAccount extends StatelessWidget{
-  final user = TextEditingController();
+  final email = TextEditingController();
   final pass = TextEditingController();
   final ver = TextEditingController();
 
@@ -13,8 +14,9 @@ class createAccount extends StatelessWidget{
 
   void dispose() {
     // Clean up the controller when the widget is disposed.
-    user.dispose();
+    email.dispose();
     pass.dispose();
+    ver.dispose();
   }
 
   @override
@@ -61,10 +63,10 @@ class createAccount extends StatelessWidget{
                 Container(
                   height: 70.0,
                   child: TextField(
-                    controller: user,
+                    controller: email,
                     cursorColor: secondaryDark,
                     decoration: InputDecoration(
-                      hintText: 'Usuario',
+                      hintText: 'algo@email.com',
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                           color: secondaryDark,
@@ -120,8 +122,17 @@ class createAccount extends StatelessWidget{
                     child: Text(
                         'Continuar'
                     ),
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => regularScreen()),);
+                    onPressed: () async {
+                      print(pass.text);
+                      print(ver.text);
+
+                      if(pass.text.compareTo(ver.text) == 0)
+                      {
+                        bool canNavegate = await register(email.text, pass.text);
+
+                        if(canNavegate)
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => regularScreen()),);
+                      }
                     },
                   ),
                 ),

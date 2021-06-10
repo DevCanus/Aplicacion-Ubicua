@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'dart:math';
 import 'package:proyecto/utils/data.dart';
 import 'package:proyecto/utils/tileModel.dart';
 import './loginAccount.dart';
@@ -15,6 +16,7 @@ class gameScreen extends StatefulWidget {
 
 class _gameScreenState extends State<gameScreen> {
   List<TileModel> tiles = new List<TileModel>();
+  String answer;
 
   @override
   void initState() {
@@ -27,6 +29,7 @@ class _gameScreenState extends State<gameScreen> {
     ]);
 
     tiles = getTiles();
+    answer = tiles[Random().nextInt(tiles.length - 1)].imageAssetPath;
   }
 
   @override
@@ -42,7 +45,17 @@ class _gameScreenState extends State<gameScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 20.0,
+        actions: [
+          IconButton(
+              icon: Icon(Icons.help_outline),
+              onPressed: null,
+          ),
+        ],
+      ),
       body: Container(
+        height: MediaQuery.of(context).size.height - AppBar().preferredSize.height,
         child: Padding(
           padding: EdgeInsets.all(5),
           child: GridView.count(
@@ -55,7 +68,7 @@ class _gameScreenState extends State<gameScreen> {
                   elevation: 10.0,
                   child: Padding(
                     padding: EdgeInsets.all(40.0),
-                    child: Image.asset("assets/images/user.png"),
+                    child: Image.asset(answer),
                   ),
                 ),
               ),
@@ -67,6 +80,7 @@ class _gameScreenState extends State<gameScreen> {
                     return Tile(
                       imageAssetPath: tiles[index].getImage(),
                       selected: tiles[index].isSelected(),
+                      answer: answer,
                       parent: this,
                     );
                   }
@@ -84,11 +98,12 @@ class _gameScreenState extends State<gameScreen> {
 
 class Tile extends StatefulWidget {
   String imageAssetPath;
+  String answer;
   bool selected;
 
   _gameScreenState parent;
 
-  Tile({this.imageAssetPath, this.selected, this.parent});
+  Tile({this.imageAssetPath, this.answer, this.selected, this.parent});
 
   @override
   _TileState createState() => _TileState();
@@ -110,7 +125,7 @@ class _TileState extends State<Tile> {
           elevation: 10.0,
           child: Padding(
             padding: EdgeInsets.all(10.0),
-            child: widget.selected ? Image.asset("assets/images/default.jpg") : Image.asset(widget.imageAssetPath),
+            child: widget.selected ? (widget.answer.compareTo(widget.imageAssetPath) == 0 ? Image.asset('assets/images/colors.jpg') : Image.asset("assets/images/default.jpg")) : Image.asset(widget.imageAssetPath),
           ),
         ),
       ),

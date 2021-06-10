@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/rendering.dart';
 import 'package:proyecto/loginAccount.dart';
 import './loginAccount.dart';
+import './gameScreen.dart';
 
 class regularScreen extends StatelessWidget{
   @override
@@ -48,7 +49,10 @@ class regularScreen extends StatelessWidget{
               scrollDirection: Axis.vertical,
             ),
             items: <Widget>[
-              buildColors(context),
+              GestureDetector(
+                onTap: () { Navigator.push(context, MaterialPageRoute(builder: (context) => gameScreen()),); },
+                child: buildColors(context),
+              ),
               buildShapes(context),
               buildSizes(context),
               buildMix(context),
