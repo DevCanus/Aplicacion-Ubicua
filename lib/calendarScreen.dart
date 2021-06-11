@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import './regularScreen.dart';
 import './utils/utils.dart';
 import './themes/color.dart';
 
@@ -152,8 +156,11 @@ class _calendarScreenState extends State<calendarScreen> {
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       child: ListTile(
-                        onTap: () => print(
-                            '${value[index]}'), //Eventos dentro de los dias
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context) =>
+                                  regularScreen()),); //Eventos dentro de los dias
+                        },
                         title: Text('${value[index]}'),
                       ),
                     );
@@ -343,9 +350,16 @@ class _AddDateState extends State<AddDate> {
                           primary: secondaryDark,
                         ),
                         onPressed: () {
-                          print(nombre);
-                          print(tipo);
-                          print(fecha);
+                          var user = FirebaseAuth.instance.currentUser;
+
+                          FirebaseFirestore.instance.collection('users').doc(user.uid).collection('consultas').add({
+                            "nombre" : nombre,
+                            "tipo" : tipo,
+                            "fecha" : controlador.text,
+                          }).then((_) {
+                            print("Success!");
+                          });
+                          Navigator.pop(context);
                         },
                         child: Text('Añadir'),
                       ),

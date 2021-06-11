@@ -154,13 +154,9 @@ class _createAccountState extends State<createAccount> {
                         'Continuar'
                     ),
                     onPressed: () async {
-                      print(pass.text);
-                      print(ver.text);
-
                       if (pass.text.compareTo(ver.text) == 0) {
                         var user = await register(email.text, pass.text);
                         if (user != null) {
-                          print(FirebaseFirestore.instance.collection('users'));
                           FirebaseFirestore.instance.collection('users').doc(user.uid).set(
                           {
                             "rol": role,
@@ -169,7 +165,8 @@ class _createAccountState extends State<createAccount> {
                           });
 
                           if(role.compareTo("Terapeuta") == 0)
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => calendarScreen()),);
+                            Navigator.push(context, MaterialPageRoute(
+                                builder: (context) => calendarScreen()),);
                           else
                             Navigator.push(context, MaterialPageRoute(
                                 builder: (context) => regularScreen()),);
