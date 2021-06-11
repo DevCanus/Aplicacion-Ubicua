@@ -97,7 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     controller: email,
                     cursorColor: secondaryDark,
                     decoration: InputDecoration(
-                      hintText: 'algo@email.com',
+                      hintText: 'Email',
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                           color: secondaryDark,
@@ -136,10 +136,20 @@ class _MyHomePageState extends State<MyHomePage> {
                       'Continuar'
                     ),
                     onPressed: () async {
-                      bool canNavegate = await signIn(email.text, pass.text);
+                      var user = await signIn(email.text, pass.text);
 
-                      if(canNavegate)
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => calendarScreen()),);
+                      if(user != null)
+                      {
+                        var document = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+                        Map<String, dynamic> data = document.data();
+                        var value = data['rol'];
+
+                        if("Terapeuta".compareTo(value) == 0)
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => calendarScreen()),);
+                        else
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => regularScreen()),);
+                      }
                     },
                   ),
                 ),

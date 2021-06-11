@@ -16,7 +16,10 @@ class gameScreen extends StatefulWidget {
 
 class _gameScreenState extends State<gameScreen> {
   List<TileModel> tiles = new List<TileModel>();
-  String answer;
+  List<TileModel> halfs = new List<TileModel>();
+  bool rebuild;
+  int answer;
+  Random random = new Random();
 
   @override
   void initState() {
@@ -29,7 +32,8 @@ class _gameScreenState extends State<gameScreen> {
     ]);
 
     tiles = getTiles();
-    answer = tiles[Random().nextInt(tiles.length - 1)].imageAssetPath;
+    halfs = getHalfs();
+    answer = random.nextInt(tiles.length - 1);
   }
 
   @override
@@ -49,61 +53,69 @@ class _gameScreenState extends State<gameScreen> {
         elevation: 20.0,
         actions: [
           IconButton(
-              icon: Icon(Icons.help_outline),
+              icon: Icon(Icons.help_outline,color: Colors.white70),
               onPressed: null,
           ),
         ],
       ),
       body: Container(
+        color: secondary,
         height: MediaQuery.of(context).size.height - AppBar().preferredSize.height,
-        child: Padding(
-          padding: EdgeInsets.all(5),
-          child: GridView.count(
-            crossAxisCount: 2,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.all(40.0),
-                child: Card(
-                  color: Colors.white,
-                  elevation: 10.0,
-                  child: Padding(
-                    padding: EdgeInsets.all(40.0),
-                    child: Image.asset(answer),
-                  ),
-                ),
-              ),
-              Center(
-                child: GridView.count(
-                  shrinkWrap: true,
-                  crossAxisCount: 3,
-                  children: List.generate(tiles.length, (index) {
-                    return Tile(
-                      imageAssetPath: tiles[index].getImage(),
-                      selected: tiles[index].isSelected(),
-                      answer: answer,
-                      parent: this,
-                    );
-                  }
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+        child: buildGame(context),
       ),
     );
   }
+  
+  @override
+  Widget buildGame(BuildContext context) => Padding(
+    padding: EdgeInsets.all(5.0),
+    child: GridView.count(
+      crossAxisCount: 2,
+      childAspectRatio: 4/3,
+      children: <Widget>[
+          Padding(
+            padding: EdgeInsets.all(10.0),
+            child: Card(
+              color: Colors.white,
+              elevation: 10.0,
+              shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(20.0) ),
+              child: Padding(
+                padding: EdgeInsets.all(40.0),
+                child: Image.asset(halfs[answer].imageAssetPath),
+              ),
+            ),
+          ),
+          Center(
+            child: GridView.count(
+              shrinkWrap: true,
+              crossAxisCount: 3,
+              children: List.generate(tiles.length, (index) {
+                return Tile(
+                  imageAssetPath: tiles[index].getImage(),
+                  selected: tiles[index].isSelected(),
+                  answer: answer,
+                  index: index,
+                  parent: this,
+                );
+              }
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 
 class Tile extends StatefulWidget {
   String imageAssetPath;
-  String answer;
+  int answer;
+  int index;
   bool selected;
 
   _gameScreenState parent;
 
-  Tile({this.imageAssetPath, this.answer, this.selected, this.parent});
+  Tile({this.imageAssetPath, this.answer, this.index, this.selected, this.parent});
 
   @override
   _TileState createState() => _TileState();
@@ -123,9 +135,10 @@ class _TileState extends State<Tile> {
         child: Card(
           color: Colors.white,
           elevation: 10.0,
+          shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(20.0) ),
           child: Padding(
             padding: EdgeInsets.all(10.0),
-            child: widget.selected ? (widget.answer.compareTo(widget.imageAssetPath) == 0 ? Image.asset('assets/images/colors.jpg') : Image.asset("assets/images/default.jpg")) : Image.asset(widget.imageAssetPath),
+            child: widget.selected ? ((widget.answer == widget.index) ? Image.asset('assets/images/right.jpg') : Image.asset("assets/images/wrong.jpg")) : Image.asset(widget.imageAssetPath),
           ),
         ),
       ),
