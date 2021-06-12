@@ -21,6 +21,7 @@ class _gameScreenState extends State<gameScreen> {
   int counter;
   int answer;
   Random random;
+  bool changeorientation = true;
 
   @override
   void initState() {
@@ -36,23 +37,16 @@ class _gameScreenState extends State<gameScreen> {
     tiles = getTiles();
     halfs = getHalfs();
     random = new Random();
-    answer = random.nextInt(tiles.length - 1);
+    answer = random.nextInt(tiles.length);
   }
 
-  reconstruct()
-  {
-    answer = random.nextInt(tiles.length - 1);
-  }
-
-  @override
+@override
   dispose(){
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+    if(changeorientation)
+      SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -138,12 +132,15 @@ class _TileState extends State<Tile> {
       onTap: () {
         setState(() {
           widget.selected = true;
-          if(widget.answer == widget.index)
-            super.setState(() {
-              _gameScreenState().counter += 1;
-              _gameScreenState().random = new Random(_gameScreenState().counter);
-              _gameScreenState().answer = _gameScreenState().random.nextInt(_gameScreenState().tiles.length - 1);
+          if(widget.answer == widget.index) {
+            setState(() {
+              widget.parent.changeorientation = false;
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => gameScreen()));
             });
+          }
         });
       },
       child: Container(

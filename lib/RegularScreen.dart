@@ -2,11 +2,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:proyecto/LoginAccount.dart';
 import './LoginAccount.dart';
 import './GameScreen.dart';
 
-class regularScreen extends StatelessWidget{
+class regularScreen extends StatefulWidget {
+  const regularScreen({Key key}) : super(key: key);
+
+  @override
+  _regularScreenState createState() => _regularScreenState();
+}
+
+class _regularScreenState extends State<regularScreen> {
+  @override
+  void initState() {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context){
     return Scaffold(
