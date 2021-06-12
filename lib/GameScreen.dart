@@ -4,8 +4,9 @@ import 'package:flutter/services.dart';
 import 'dart:math';
 import 'package:proyecto/utils/data.dart';
 import 'package:proyecto/utils/tileModel.dart';
-import './loginAccount.dart';
-import './regularScreen.dart';
+import './LoginAccount.dart';
+import './RegularScreen.dart';
+import './HelpScreen.dart';
 import './themes/color.dart';
 
 class gameScreen extends StatefulWidget {
@@ -17,9 +18,9 @@ class gameScreen extends StatefulWidget {
 class _gameScreenState extends State<gameScreen> {
   List<TileModel> tiles = new List<TileModel>();
   List<TileModel> halfs = new List<TileModel>();
-  bool rebuild;
+  int counter;
   int answer;
-  Random random = new Random();
+  Random random;
 
   @override
   void initState() {
@@ -31,8 +32,15 @@ class _gameScreenState extends State<gameScreen> {
       DeviceOrientation.landscapeRight,
     ]);
 
+    counter = 0;
     tiles = getTiles();
     halfs = getHalfs();
+    random = new Random();
+    answer = random.nextInt(tiles.length - 1);
+  }
+
+  reconstruct()
+  {
     answer = random.nextInt(tiles.length - 1);
   }
 
@@ -53,8 +61,10 @@ class _gameScreenState extends State<gameScreen> {
         elevation: 20.0,
         actions: [
           IconButton(
-              icon: Icon(Icons.help_outline,color: Colors.white70),
-              onPressed: null,
+              icon: Icon(Icons.help_outline,color: Colors.white),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => helpScreen()),);
+                },
           ),
         ],
       ),
@@ -128,6 +138,12 @@ class _TileState extends State<Tile> {
       onTap: () {
         setState(() {
           widget.selected = true;
+          if(widget.answer == widget.index)
+            super.setState(() {
+              _gameScreenState().counter += 1;
+              _gameScreenState().random = new Random(_gameScreenState().counter);
+              _gameScreenState().answer = _gameScreenState().random.nextInt(_gameScreenState().tiles.length - 1);
+            });
         });
       },
       child: Container(

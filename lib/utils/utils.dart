@@ -7,6 +7,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+String FocusedDay;
+
 /// Example event class.
 class Event {
   final String title;
@@ -27,7 +29,7 @@ final kEvents = LinkedHashMap<DateTime, List<Event>>(
 // el mapa es asi  {"2000,01,01": contenido, "2000,01,02": 4, "0000,00,03": 9}
 final _kEventSource = Map.fromIterable(List.generate(50, (index) => index),//lista generada con 50 elementos {0,1,2,...,49,50}, aqui poner el tamaño de la tabla de la bd
     key: (item) => DateTime.utc(2021, 06, item+1),//Es la fecha que va contener un evento, PK
-    value: (item) => List.generate(10, (index) => Event('Consulta con')));//List.generate(item % 4 + 1, (index) => Event('Event $item | ${index + 1}')));
+    value: (item) => List.generate(10, (index) => Event("Evento")));//List.generate(item % 4 + 1, (index) => Event('Event $item | ${index + 1}')));
 /*..addAll({
     DateTime.now(): [
       Event('Today\'s Event 1'),
